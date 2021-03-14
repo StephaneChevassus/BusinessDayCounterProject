@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BusinessDayCounterTests": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
