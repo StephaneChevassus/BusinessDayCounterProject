@@ -7,6 +7,10 @@ namespace BusinessDayCounterLibrary
 {
     public abstract class PublicHolidaysRules
     {
+        /// <summary>
+        /// Gets public holidays between two dates based on the public holiday rule
+        /// </summary>
+        public abstract IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate);
     }
 
     /// <summary>
@@ -18,6 +22,18 @@ namespace BusinessDayCounterLibrary
         public DateTime AnzacDay(int year)
         {
             return new DateTime(year, 4, 25);
+        }
+
+        public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
+        {
+            List<DateTime> publicHolidays = new List<DateTime>();
+
+            for(var year = startDate.Year; year <= endDate.Year; year++)
+            {
+                publicHolidays.Add(AnzacDay(year));
+            }
+
+            return publicHolidays.AsEnumerable();
         }
     }
 
@@ -35,6 +51,17 @@ namespace BusinessDayCounterLibrary
             return DateTime.Now;
         }
 
+        public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
+        {
+            List<DateTime> publicHolidays = new List<DateTime>();
+
+            for(var year = startDate.Year; year <= endDate.Year; year++)
+            {
+                publicHolidays.Add(NewYearsDay(year));
+            }
+
+            return publicHolidays.AsEnumerable();
+        }
     }
 
     /// <summary>
@@ -48,6 +75,18 @@ namespace BusinessDayCounterLibrary
         {
             //Generate a date based on an occurrence
             return DateTime.Now;
+        }
+
+        public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
+        {
+            List<DateTime> publicHolidays = new List<DateTime>();
+
+            for(var year = startDate.Year; year <= endDate.Year; year++)
+            {
+                publicHolidays.Add(QueensBirthday(year));
+            }
+
+            return publicHolidays.AsEnumerable();
         }
     }
 }

@@ -55,13 +55,26 @@ namespace BusinessDayCounterLibrary
         /// </summary>
         public static int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<PublicHolidaysRules> publicHolidaysRules)
         {
-            //Given a list of public holidays rules
-            //Generate a list of public holidays within the date range supplied
+            //Compare supplied dates
+            if(secondDate.Date <= firstDate.Date)
+            {
+                return 0;
+            }
 
+            List<DateTime> publicHolidays = new List<DateTime>();
+
+            //Given a list of public holidays rules
+            foreach(var rule in publicHolidaysRules)
+            {
+                //Generate a list of public holidays within the date range supplied
+                var newPublicHolidays = rule.GetPublicHolidays(firstDate, secondDate);
+                publicHolidays.AddRange(newPublicHolidays);
+            }
             //Then re-use the method from task 2 to get the business days between the two dates given a list of public holidays
+            var businessDayCount = BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
 
             //Return the count
-            return -1;
+            return businessDayCount;
         }
     }
 }
