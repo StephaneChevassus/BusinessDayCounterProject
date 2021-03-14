@@ -58,6 +58,33 @@ namespace BusinessDayCounterTests
         }
 
         /// <summary>
+        /// Ensures that the business days between two dates are calculated correctly given a list of public holidays rules for Task 3
+        /// </summary>
+        [Theory]
+        [InlineData("31/12/2016", "2/01/2017", 0)]
+        [InlineData("1/01/2017", "22/01/2017", 14)]
+        [InlineData("22/04/2017", "28/04/2017", 3)]
+        [InlineData("1/06/2017", "19/06/2017", 10)]
+        public void Task3_Calculate_BusinessDays_Between_TwoDates(string firstDate, string secondDate, int expectedCount)
+        {
+            //Given two dates and a list of public holidays rules
+            var publicHolidaysRules = new Object[]
+            {
+                    new Object(),
+                    new Object(),
+                    new Object()
+            };
+            var testFirstDate = DateTime.ParseExact(firstDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            var testSecondtDate = DateTime.ParseExact(secondDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+
+            //When I count the business days between the two dates
+            var actualCount = BusinessDayCounter.BusinessDaysBetweenTwoDates(testFirstDate, testSecondtDate, publicHolidaysRules.ToList());
+
+            //Then the count should exclude weekends and public holidays
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        /// <summary>
         /// Ensures that the generated range between two dates excludes the two dates
         /// </summary>
         [Theory]

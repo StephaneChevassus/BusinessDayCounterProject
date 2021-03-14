@@ -49,5 +49,19 @@ namespace BusinessDayCounterLibrary
             //Return the count
             return businessDayCount;
         }
+
+        /// <summary>
+        /// Caculates the number of business days between two dates given a set of rules that define public holidays
+        /// </summary>
+        public static int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<Object> publicHolidaysRules)
+        {
+            //Given a list of public holidays rules
+            //Generate a list of public holidays within the date range supplied
+
+            //Then re-use the method from task 2 to get the business days between the two dates given a list of public holidays
+
+            //Return the count
+            return -1;
+        }
     }
 }
