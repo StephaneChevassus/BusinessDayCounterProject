@@ -13,7 +13,7 @@ namespace BusinessDayCounterLibrary
         public static int WeekdaysBetweenTwoDates(DateTime firstDate, DateTime secondDate)
         {
             //Compare supplied dates
-            if(secondDate.Date <= firstDate.Date)
+            if(ValidateInputDates(firstDate, secondDate))
             {
                 return 0;
             }
@@ -34,7 +34,7 @@ namespace BusinessDayCounterLibrary
         public static int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime> publicHolidays)
         {
             //Compare supplied dates
-            if(secondDate.Date <= firstDate.Date)
+            if(ValidateInputDates(firstDate, secondDate))
             {
                 return 0;
             }
@@ -56,7 +56,7 @@ namespace BusinessDayCounterLibrary
         public static int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<PublicHolidaysRules> publicHolidaysRules)
         {
             //Compare supplied dates
-            if(secondDate.Date <= firstDate.Date)
+            if(ValidateInputDates(firstDate, secondDate))
             {
                 return 0;
             }
@@ -75,6 +75,16 @@ namespace BusinessDayCounterLibrary
 
             //Return the count
             return businessDayCount;
+        }
+
+        /// <summary>
+        /// Validates input dates.
+        /// firstDate must be earlier than secondDate
+        /// </summary>
+        /// <returns>bool</returns>
+        private static bool ValidateInputDates(DateTime firstDate, DateTime secondDate)
+        {
+            return (secondDate.Date <= firstDate.Date);
         }
     }
 }

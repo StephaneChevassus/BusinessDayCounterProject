@@ -16,7 +16,7 @@ namespace BusinessDayCounterLibrary
     /// <summary>
     /// Public holidays which are always on the same day, e.g. Anzac Day on April 25th every year.
     /// </summary>
-    public class FixedPublicHolidays : PublicHolidaysRules
+    public sealed class FixedPublicHolidays : PublicHolidaysRules
     {
         //Anzac Day
         public DateTime AnzacDay(int year)
@@ -42,7 +42,7 @@ namespace BusinessDayCounterLibrary
     /// e.g. New Year's Day on January 1st every year, unless that is a Saturday or Sunday, 
     /// in which case the holiday is the next Monday.
     /// </summary>
-    public class MovingPublicHolidays : PublicHolidaysRules
+    public sealed class MovingPublicHolidays : PublicHolidaysRules
     {
         //New Year's Day
         public DateTime NewYearsDay(int year)
