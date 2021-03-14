@@ -68,11 +68,11 @@ namespace BusinessDayCounterTests
         public void Task3_Calculate_BusinessDays_Between_TwoDates(string firstDate, string secondDate, int expectedCount)
         {
             //Given two dates and a list of public holidays rules
-            var publicHolidaysRules = new Object[]
+            var publicHolidaysRules = new PublicHolidaysRules[]
             {
-                    new Object(),
-                    new Object(),
-                    new Object()
+                    new FixedPublicHolidays(),
+                    new MovingPublicHolidays(),
+                    new OccurrencePublicHolidays()
             };
             var testFirstDate = DateTime.ParseExact(firstDate, "d/M/yyyy", CultureInfo.InvariantCulture);
             var testSecondtDate = DateTime.ParseExact(secondDate, "d/M/yyyy", CultureInfo.InvariantCulture);
