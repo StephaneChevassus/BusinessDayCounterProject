@@ -122,5 +122,39 @@ namespace BusinessDayCounterTests
             //Then I should not be able to generate a date range
             Assert.Throws<ArgumentException>(act);
         }
+
+        /// <summary>
+        /// Ensures that a date is correctly generated given a valid occurrence
+        /// </summary>
+        [Theory]
+        [InlineData(2021, 6, DayOfWeek.Monday, 2, "14/06/2021")] //2nd Monday of June 2021
+        [InlineData(2021, 3, DayOfWeek.Wednesday, 5, "31/03/2021")] //5th Wednesday of March 2021
+        public void GetDateByOccurrence_WithValidInput(int year, int month, DayOfWeek dayOfWeek, int dayOfWeekOccurrence, string expectedDateTime)
+        {
+            //Given a date defined by valid occurrence
+
+            //When I create the date 
+            DateTime actualDateTime = DayCounterHelper.GetDateByOccurrence(year, month, dayOfWeek, dayOfWeekOccurrence);
+
+            //Then I should create the correct date
+            Assert.Equal(DateTime.ParseExact(expectedDateTime, "d/M/yyyy", CultureInfo.InvariantCulture).Date, actualDateTime.Date);
+        }
+
+        /// <summary>
+        /// Ensures that a date cannot be generated with invalid occurrence
+        /// </summary>
+        [Theory]
+        [InlineData(2021, 1, DayOfWeek.Monday, 5)] //5th Monday of January 2021
+        [InlineData(2021, 13, DayOfWeek.Monday, 1)] //1st Monday in the 13th month of 2021
+        public void GetDateByOccurrence_WithInvalidInput(int year, int month, DayOfWeek dayOfWeek, int dayOfWeekOccurrence)
+        {
+            //Given a date defined by invalid occurrence
+
+            //When I create the date 
+            Action act = () => DayCounterHelper.GetDateByOccurrence(year, month, dayOfWeek, dayOfWeekOccurrence);
+
+            //Then I should not be able to create the date
+            Assert.Throws<ArgumentOutOfRangeException>(act);
+        }
     }
 }

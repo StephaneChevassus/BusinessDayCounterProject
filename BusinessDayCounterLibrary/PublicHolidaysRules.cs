@@ -74,7 +74,7 @@ namespace BusinessDayCounterLibrary
         public DateTime QueensBirthday(int year)
         {
             //Generate a date based on an occurrence
-            return DateTime.Now;
+            return DayCounterHelper.GetDateByOccurrence(year, 6, DayOfWeek.Monday, 2);
         }
 
         public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)

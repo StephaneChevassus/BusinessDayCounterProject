@@ -58,6 +58,26 @@ namespace BusinessDayCounterLibrary.Helpers
             }
             return publicHoliday;
         }
+
+        /// <summary>
+        /// Gets a date based on a given occurrence
+        /// e.g. 2nd Monday of June 2021
+        /// </summary>
+        /// <param name="year">2021</param>
+        /// <param name="month">6</param>
+        /// <param name="dayOfWeek">Monday</param>
+        /// <param name="dayOfWeekOccurrence">2 (2nd day of the occurrence)</param>
+        /// <returns></returns>
+        public static DateTime GetDateByOccurrence(int year, int month, DayOfWeek dayOfWeek, int dayOfWeekOccurrence)
+        {
+            //Get a date range for the given month
+            var dateRange = Enumerable.Range(1, DateTime.DaysInMonth(year, month)).Select(d => new DateTime(year, month, d));
+
+            //Select all the dates matching the given day of the week and select the day corresponding to the occurrence
+            var publicHoliday = dateRange.Where(d => d.DayOfWeek == dayOfWeek).ElementAt(dayOfWeekOccurrence - 1);
+
+            return publicHoliday;
+        }
     }
 
     public static class DateTimeExtensions
