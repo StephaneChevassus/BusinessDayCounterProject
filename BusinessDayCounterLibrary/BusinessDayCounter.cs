@@ -36,14 +36,23 @@ namespace BusinessDayCounterLibrary
         public static int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime> publicHolidays)
         {
             //Compare supplied dates
+            if(secondDate.Date <= firstDate.Date)
+            {
+                return 0;
+            }
 
             //Get the date range between the two dates excluding firstDate and secondDate
+            var dateRange = DayCounterHelper.GetDateRangeBetweenTwoDates(firstDate, secondDate);
 
             //Count the number of dates that are a business day
             //"Monday, Tuesday, Wednesday, Thursday, Friday" but excluding public holidays
+            var businessDayCount = dateRange
+                .Where(d => d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                .Where(d => !publicHolidays.Any(p => d.Date.Equals(p.Date)))
+                .Count();
 
             //Return the count
-            return -1;
+            return businessDayCount;
         }
     }
 }
