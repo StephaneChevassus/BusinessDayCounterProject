@@ -48,7 +48,7 @@ namespace BusinessDayCounterLibrary
         public DateTime NewYearsDay(int year)
         {
             //Generate the date but move it to the following Monday if it falls on a weekend
-            return DateTime.Now;
+            return DayCounterHelper.MovePublicHolidayToMonday(new DateTime(year, 1, 1));
         }
 
         public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)

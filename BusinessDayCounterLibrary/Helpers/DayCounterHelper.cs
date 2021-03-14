@@ -32,9 +32,7 @@ namespace BusinessDayCounterLibrary.Helpers
         /// </summary>
         public static IEnumerable<DateTime> GetWeekdays(IEnumerable<DateTime> dateRange)
         {
-            return dateRange
-                .Where(d => d.DayOfWeek != DayOfWeek.Saturday
-                && d.DayOfWeek != DayOfWeek.Sunday);
+            return dateRange.Where(d => !d.IsDayOfWeekSaturday() && !d.IsDayOfWeekSunday());
         }
 
         /// <summary>
@@ -43,6 +41,35 @@ namespace BusinessDayCounterLibrary.Helpers
         public static IEnumerable<DateTime> GetBusinessDays(IEnumerable<DateTime> dateRange, IEnumerable<DateTime> publicHolidays)
         {
             return GetWeekdays(dateRange).Where(d => !publicHolidays.Any(p => d.Date.Equals(p.Date)));
+        }
+
+        /// <summary>
+        /// Moves the public holiday to the following Monday if it falls on a weekend
+        /// </summary>
+        public static DateTime MovePublicHolidayToMonday(DateTime publicHoliday)
+        {
+            if(publicHoliday.IsDayOfWeekSaturday())
+            {
+                publicHoliday = publicHoliday.AddDays(2);
+            }
+            else if(publicHoliday.IsDayOfWeekSunday())
+            {
+                publicHoliday = publicHoliday.AddDays(1);
+            }
+            return publicHoliday;
+        }
+    }
+
+    public static class DateTimeExtensions
+    {
+        public static bool IsDayOfWeekSaturday(this DateTime dateTime)
+        {
+            return dateTime.DayOfWeek == DayOfWeek.Saturday;
+        }
+
+        public static bool IsDayOfWeekSunday(this DateTime dateTime)
+        {
+            return dateTime.DayOfWeek == DayOfWeek.Sunday;
         }
     }
 }
