@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BusinessDayCounterLibrary.Helpers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BusinessDayCounterLibrary
 {
@@ -11,13 +13,21 @@ namespace BusinessDayCounterLibrary
         public static int WeekdaysBetweenTwoDates(DateTime firstDate, DateTime secondDate)
         {
             //Compare supplied dates
+            if(secondDate.Date <= firstDate.Date)
+            {
+                return 0;
+            }
 
             //Get the date range between the two dates excluding firstDate and secondDate
+            var dateRange = DayCounterHelper.GetDateRangeBetweenTwoDates(firstDate, secondDate);
 
             //Count the number of dates that are a weekday "Monday, Tuesday, Wednesday, Thursday, Friday"
+            var weekdayCount = dateRange
+                .Where(d => d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                .Count();
 
             //Return the count
-            return -1;
+            return weekdayCount;
         }
 
         /// <summary>

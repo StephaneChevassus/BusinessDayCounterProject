@@ -14,8 +14,9 @@ namespace BusinessDayCounterTests
         [Theory]
         [InlineData("7/10/2013", "9/10/2013", 1)]
         [InlineData("5/10/2013", "14/10/2013", 5)]
-        [InlineData("7/10/2013", "1/10/2013", 61)]
+        [InlineData("7/10/2013", "1/01/2014", 61)]
         [InlineData("7/10/2013", "5/10/2013", 0)]
+        [InlineData("1/03/2021", "2/03/2021", 0)]
         public void Task1_Calculate_Weekdays_Between_TwoDates(string firstDate, string secondDate, int expectedCount)
         {
             //Given two dates
