@@ -1,4 +1,5 @@
 using BusinessDayCounterLibrary;
+using BusinessDayCounterLibrary.Helpers;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace BusinessDayCounterTests
     public class TestBusinessDayCounter
     {
         /// <summary>
-        /// Ensure that the weekdays between two dates are calculated correctly for Task 1
+        /// Ensures that the weekdays between two dates are calculated correctly for Task 1
         /// </summary>
         [Theory]
         [InlineData("7/10/2013", "9/10/2013", 1)]
@@ -31,7 +32,7 @@ namespace BusinessDayCounterTests
         }
 
         /// <summary>
-        /// Ensure that the business days between two dates are calculated correctly given a list of public holidays for Task 2
+        /// Ensures that the business days between two dates are calculated correctly given a list of public holidays for Task 2
         /// </summary>
         [Theory]
         [InlineData("7/10/2013", "9/10/2013", 1)]
@@ -54,6 +55,45 @@ namespace BusinessDayCounterTests
 
             //Then the count should exclude weekends and public holidays
             Assert.Equal(expectedCount, actualCount);
+        }
+
+        /// <summary>
+        /// Ensures that the generated range between two dates excludes the two dates
+        /// </summary>
+        [Theory]
+        [InlineData("7/10/2013", "8/10/2013", 0)]
+        [InlineData("7/10/2013", "9/10/2013", 1)]
+        [InlineData("7/10/2013", "14/10/2013", 6)]
+        public void GetDateRange_Between_TwoValidDates(string startDate, string endDate, int expectedCount)
+        {
+            //Given two dates
+            var testStartDate = DateTime.ParseExact(startDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            var testEndDate = DateTime.ParseExact(endDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+
+            //When I generate a range of dates between the two dates
+            var actualCount = DayCounterHelper.GetDateRangeBetweenTwoDates(testStartDate, testEndDate).Count();
+
+            //Then the count should exclude the two dates
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        /// <summary>
+        /// Ensures that the start date is prior to the end date when generating a date range
+        /// </summary>
+        [Theory]
+        [InlineData("7/10/2013", "7/10/2013")]
+        [InlineData("9/10/2013", "7/10/2013")]
+        public void GetDateRange_Between_TwoInvalidDates(string startDate, string endDate)
+        {
+            //Given two dates with the startDate greater than the endDate
+            var testStartDate = DateTime.ParseExact(startDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            var testEndtDate = DateTime.ParseExact(endDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+
+            //When I generate a range of dates 
+            Action act = () => DayCounterHelper.GetDateRangeBetweenTwoDates(testStartDate, testEndtDate);
+
+            //Then I should not be able to generate a date range
+            Assert.Throws<ArgumentException>(act);
         }
     }
 }
