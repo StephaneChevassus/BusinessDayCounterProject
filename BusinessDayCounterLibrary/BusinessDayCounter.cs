@@ -31,7 +31,7 @@ namespace BusinessDayCounterLibrary
         /// <summary>
         /// Caculates the number of business days between two dates given a list of public holidays
         /// </summary>
-        public static int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime> publicHolidays)
+        public static double BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime> publicHolidays)
         {
             //Compare supplied dates
             if(ValidateInputDates(firstDate, secondDate))
@@ -43,8 +43,24 @@ namespace BusinessDayCounterLibrary
             var dateRange = DayCounterHelper.GetDateRangeBetweenTwoDates(firstDate, secondDate);
 
             //Count the number of dates that are a business day
-            //"Monday, Tuesday, Wednesday, Thursday, Friday" but excluding public holidays
-            var businessDayCount = DayCounterHelper.GetBusinessDays(dateRange, publicHolidays.AsEnumerable()).Count();
+            //"Monday, Tuesday, Wednesday, Thursday, Friday" but excluding full public holidays and included the half day portion of a half public holiday
+
+            //When comparing Hour, it uses the 24 format therefore it is safe to assume that 12 means 12pm otherwise it would be 00
+            var halfDayPublicHolidays = publicHolidays.Where(d => d.Hour == 12);
+            var fullDayPublicHolidays = publicHolidays.Where(d => d.Hour != 12);
+
+
+            //First get the true full business days (a half day is not a full business day, so we need to pass the half day list)
+            var fullBusinessDays = DayCounterHelper.GetFullBusinessDays(dateRange, fullDayPublicHolidays, halfDayPublicHolidays);
+
+            //Then get the true half business days
+            var halfBusinessDays = DayCounterHelper.GetHalfBusinessDays(dateRange, fullDayPublicHolidays, halfDayPublicHolidays);
+
+            double fullBusinessDaysCount = fullBusinessDays.Count();
+
+            double halfBusinessDaysCount = ((double)halfBusinessDays.Count() / 2);
+
+            var businessDayCount = fullBusinessDaysCount + halfBusinessDaysCount;
 
             //Return the count
             return businessDayCount;
@@ -53,7 +69,7 @@ namespace BusinessDayCounterLibrary
         /// <summary>
         /// Caculates the number of business days between two dates given a set of rules that define public holidays
         /// </summary>
-        public static int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<PublicHolidaysRules> publicHolidaysRules)
+        public static double BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<PublicHolidaysRules> publicHolidaysRules)
         {
             //Compare supplied dates
             if(ValidateInputDates(firstDate, secondDate))
@@ -70,6 +86,7 @@ namespace BusinessDayCounterLibrary
                 var newPublicHolidays = rule.GetPublicHolidays(firstDate, secondDate);
                 publicHolidays.AddRange(newPublicHolidays);
             }
+
             //Then re-use the method from task 2 to get the business days between the two dates given a list of public holidays
             var businessDayCount = BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
 

@@ -35,17 +35,17 @@ namespace BusinessDayCounterTests
         /// Ensures that the business days between two dates are calculated correctly given a list of public holidays for Task 2
         /// </summary>
         [Theory]
-        [InlineData("7/10/2013", "9/10/2013", 1)]
-        [InlineData("24/12/2013", "27/12/2013", 0)]
-        [InlineData("7/10/2013", "1/01/2014", 59)]
-        public void Task2_Calculate_BusinessDays_Between_TwoDates(string firstDate, string secondDate, int expectedCount)
+        [InlineData("7/10/2013", "9/10/2013", 0.5)]
+        //[InlineData("24/12/2013", "27/12/2013", 0)]
+        //[InlineData("7/10/2013", "1/01/2014", 59)]
+        public void Task2_Calculate_BusinessDays_Between_TwoDates(string firstDate, string secondDate, double expectedCount)
         {
             //Given two dates and a list of public holidays
             var publicHolidays = new[]
             {
                     new DateTime(2013, 12, 25),
                     new DateTime(2013, 12, 26),
-                    new DateTime(2014, 1, 1)
+                    new DateTime(2013, 10, 8, 12, 0, 0)
             };
             var testFirstDate = DateTime.ParseExact(firstDate, "d/M/yyyy", CultureInfo.InvariantCulture);
             var testSecondtDate = DateTime.ParseExact(secondDate, "d/M/yyyy", CultureInfo.InvariantCulture);
@@ -72,7 +72,8 @@ namespace BusinessDayCounterTests
             {
                     new FixedPublicHolidays(),
                     new MovingPublicHolidays(),
-                    new OccurrencePublicHolidays()
+                    new OccurrencePublicHolidays(),
+                    new HalfDayPublicHolidays()
             };
             var testFirstDate = DateTime.ParseExact(firstDate, "d/M/yyyy", CultureInfo.InvariantCulture);
             var testSecondtDate = DateTime.ParseExact(secondDate, "d/M/yyyy", CultureInfo.InvariantCulture);

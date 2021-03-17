@@ -89,4 +89,24 @@ namespace BusinessDayCounterLibrary
             return publicHolidays.AsEnumerable();
         }
     }
+
+    public sealed class HalfDayPublicHolidays : PublicHolidaysRules
+    {
+        public DateTime CrowdDesign(int year)
+        {
+            return new DateTime(year, 3, 17, 12, 0, 0);
+        }
+
+        public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
+        {
+            List<DateTime> publicHolidays = new List<DateTime>();
+
+            for(var year = startDate.Year; year <= endDate.Year; year++)
+            {
+                publicHolidays.Add(CrowdDesign(year));
+            }
+
+            return publicHolidays.AsEnumerable();
+        }
+    }
 }

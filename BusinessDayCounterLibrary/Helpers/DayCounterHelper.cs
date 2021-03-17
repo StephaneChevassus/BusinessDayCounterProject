@@ -43,6 +43,24 @@ namespace BusinessDayCounterLibrary.Helpers
         }
 
         /// <summary>
+        /// Gets a list of full business days from a list of dates excluding all public holidays (either full or half)
+        /// </summary>
+        public static IEnumerable<DateTime> GetFullBusinessDays(IEnumerable<DateTime> dateRange, IEnumerable<DateTime> fullDayPublickHolidays, IEnumerable<DateTime> halfDayPublickHolidays)
+        {
+            return GetWeekdays(dateRange).Where(d => !fullDayPublickHolidays.Any(p => d.Date.Equals(p.Date)) && !halfDayPublickHolidays.Any(p => d.Date.Equals(p.Date)));
+        }
+
+        /// <summary>
+        /// Gets a list of half business days from a list of dates excluding only full day public holidays
+        /// </summary>
+        public static IEnumerable<DateTime> GetHalfBusinessDays(IEnumerable<DateTime> dateRange, IEnumerable<DateTime> fullDayPublickHolidays, IEnumerable<DateTime> halfDayPublickHolidays)
+        {
+            //A half business day is the other half portion of a half public holidays
+            //therefore we should exclude business days that are a full day public holiday and match if the day is a half day public holiday.
+            return GetWeekdays(dateRange).Where(d => !fullDayPublickHolidays.Any(p => d.Date.Equals(p.Date)) && halfDayPublickHolidays.Any(p => d.Date.Equals(p.Date)));
+        }
+
+        /// <summary>
         /// Moves the public holiday to the following Monday if it falls on a weekend
         /// </summary>
         public static DateTime MovePublicHolidayToMonday(DateTime publicHoliday)
