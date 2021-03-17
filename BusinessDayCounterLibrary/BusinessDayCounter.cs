@@ -43,9 +43,11 @@ namespace BusinessDayCounterLibrary
             var dateRange = DayCounterHelper.GetDateRangeBetweenTwoDates(firstDate, secondDate);
 
             //Count the number of dates that are a business day
-            //"Monday, Tuesday, Wednesday, Thursday, Friday" but excluding full public holidays and included the half day portion of a half public holiday
+            //A business day is a week day that is either a full day or a half day
+            //A public holiday is either defined as a full public holiday or a half public holiday
 
-            //When comparing Hour, it uses the 24 format therefore it is safe to assume that 12 means 12pm otherwise it would be 00
+            //When comparing Hour, it uses the 24 format therefore it is safe to assume that 12 means 12pm otherwise it would be 0
+            //A half public holidays is defined as a date with the time set to 12PM
             var halfDayPublicHolidays = publicHolidays.Where(d => d.Hour == 12);
             var fullDayPublicHolidays = publicHolidays.Where(d => d.Hour != 12);
 
@@ -56,14 +58,8 @@ namespace BusinessDayCounterLibrary
             //Then get the true half business days
             var halfBusinessDays = DayCounterHelper.GetHalfBusinessDays(dateRange, fullDayPublicHolidays, halfDayPublicHolidays);
 
-            double fullBusinessDaysCount = fullBusinessDays.Count();
-
-            double halfBusinessDaysCount = ((double)halfBusinessDays.Count() / 2);
-
-            var businessDayCount = fullBusinessDaysCount + halfBusinessDaysCount;
-
             //Return the count
-            return businessDayCount;
+            return (double)fullBusinessDays.Count() + ((double)halfBusinessDays.Count() / 2);
         }
 
         /// <summary>

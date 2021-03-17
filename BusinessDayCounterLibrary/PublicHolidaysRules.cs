@@ -24,6 +24,14 @@ namespace BusinessDayCounterLibrary
             return new DateTime(year, 4, 25);
         }
 
+        //Example of a Fixed Public Holiday that is a half day
+        //A half public holiday is defined as a date with the time set to 12PM
+        public DateTime HalfDay(int year)
+        {
+            //The 17th of March
+            return new DateTime(year, 3, 17, 12, 0, 0);
+        }
+
         public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
         {
             List<DateTime> publicHolidays = new List<DateTime>();
@@ -31,6 +39,7 @@ namespace BusinessDayCounterLibrary
             for(var year = startDate.Year; year <= endDate.Year; year++)
             {
                 publicHolidays.Add(AnzacDay(year));
+                publicHolidays.Add(HalfDay(year));
             }
 
             return publicHolidays.AsEnumerable();
@@ -51,6 +60,15 @@ namespace BusinessDayCounterLibrary
             return DayCounterHelper.MovePublicHolidayToMonday(new DateTime(year, 1, 1));
         }
 
+        //Example of a Moving Public Holiday that is a half day
+        //A half public holiday is defined as a date with the time set to 12PM
+        public DateTime HalfDay(int year)
+        {
+            //Generate the date but move it to the following Monday if it falls on a weekend
+            //The 13th of March
+            return DayCounterHelper.MovePublicHolidayToMonday(new DateTime(year, 3, 13, 12, 0, 0));
+        }
+
         public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
         {
             List<DateTime> publicHolidays = new List<DateTime>();
@@ -58,6 +76,7 @@ namespace BusinessDayCounterLibrary
             for(var year = startDate.Year; year <= endDate.Year; year++)
             {
                 publicHolidays.Add(NewYearsDay(year));
+                publicHolidays.Add(HalfDay(year));
             }
 
             return publicHolidays.AsEnumerable();
@@ -74,7 +93,17 @@ namespace BusinessDayCounterLibrary
         public DateTime QueensBirthday(int year)
         {
             //Generate a date based on an occurrence
-            return DayCounterHelper.GetDateByOccurrence(year, 6, DayOfWeek.Monday, 2);
+            //0 represents 12AM hour
+            return DayCounterHelper.GetDateByOccurrence(year, 6, DayOfWeek.Monday, 2, 0);
+        }
+
+        //Example of a Occurrence Public Holiday that is a half day
+        //A half public holiday is defined as a date with the time set to 12PM
+        public DateTime HalfDay(int year)
+        {
+            //Generate a date based on an occurrence
+            //The 4th Monday of March
+            return DayCounterHelper.GetDateByOccurrence(year, 3, DayOfWeek.Monday, 4, 12);
         }
 
         public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
@@ -84,26 +113,7 @@ namespace BusinessDayCounterLibrary
             for(var year = startDate.Year; year <= endDate.Year; year++)
             {
                 publicHolidays.Add(QueensBirthday(year));
-            }
-
-            return publicHolidays.AsEnumerable();
-        }
-    }
-
-    public sealed class HalfDayPublicHolidays : PublicHolidaysRules
-    {
-        public DateTime CrowdDesign(int year)
-        {
-            return new DateTime(year, 3, 17, 12, 0, 0);
-        }
-
-        public override IEnumerable<DateTime> GetPublicHolidays(DateTime startDate, DateTime endDate)
-        {
-            List<DateTime> publicHolidays = new List<DateTime>();
-
-            for(var year = startDate.Year; year <= endDate.Year; year++)
-            {
-                publicHolidays.Add(CrowdDesign(year));
+                publicHolidays.Add(HalfDay(year));
             }
 
             return publicHolidays.AsEnumerable();

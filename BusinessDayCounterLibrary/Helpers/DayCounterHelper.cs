@@ -85,10 +85,10 @@ namespace BusinessDayCounterLibrary.Helpers
         /// <param name="dayOfWeek">Monday</param>
         /// <param name="dayOfWeekOccurrence">2 (2nd day of the occurrence)</param>
         /// <returns></returns>
-        public static DateTime GetDateByOccurrence(int year, int month, DayOfWeek dayOfWeek, int dayOfWeekOccurrence)
+        public static DateTime GetDateByOccurrence(int year, int month, DayOfWeek dayOfWeek, int dayOfWeekOccurrence, int hour)
         {
             //Get a date range for the given month
-            var dateRange = Enumerable.Range(1, DateTime.DaysInMonth(year, month)).Select(d => new DateTime(year, month, d));
+            var dateRange = Enumerable.Range(1, DateTime.DaysInMonth(year, month)).Select(d => new DateTime(year, month, d, hour, 0, 0));
 
             //Select all the dates matching the given day of the week and select the day corresponding to the occurrence
             var publicHoliday = dateRange.Where(d => d.DayOfWeek == dayOfWeek).ElementAt(dayOfWeekOccurrence - 1);
