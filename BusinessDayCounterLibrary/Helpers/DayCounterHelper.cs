@@ -84,6 +84,7 @@ namespace BusinessDayCounterLibrary.Helpers
         /// <param name="month">6</param>
         /// <param name="dayOfWeek">Monday</param>
         /// <param name="dayOfWeekOccurrence">2 (2nd day of the occurrence)</param>
+        /// <param name="hour">0 for full day (12AM), 12 for half day (12PM)</param>
         /// <returns></returns>
         public static DateTime GetDateByOccurrence(int year, int month, DayOfWeek dayOfWeek, int dayOfWeekOccurrence, int hour)
         {

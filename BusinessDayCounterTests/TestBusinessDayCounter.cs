@@ -72,8 +72,8 @@ namespace BusinessDayCounterTests
         //1- Fixed 17/03
         //2- Moving 13/03
         //3- Occurrence 4th Monday of March
-        [InlineData("11/03/2021", "17/03/2021", 2.5)]//3
-        [InlineData("14/03/2021", "23/03/2021", 4.5)]//5
+        [InlineData("11/03/2021", "17/03/2021", 2.5)]
+        [InlineData("14/03/2021", "23/03/2021", 4.5)]
         public void Task3_Calculate_BusinessDays_Between_TwoDates(string firstDate, string secondDate, double expectedCount)
         {
             //Given two dates and a list of public holidays rules
